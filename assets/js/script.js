@@ -102,9 +102,9 @@ for (let i = 0; i < filterBtn.length; i++) {
 }
 
 // contact form variables
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
+// const form = document.querySelector("[data-form]");
+// const formInputs = document.querySelectorAll("[data-form-input]");
+// const formBtn = document.querySelector("[data-form-btn]");
 
 // // add event to all form input field
 // for (let i = 0; i < formInputs.length; i++) {
@@ -118,21 +118,21 @@ const formBtn = document.querySelector("[data-form-btn]");
 //   });
 // }
 
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
-    console.log("Input value:", this.value);
-    console.log("Input valid:", this.checkValidity()); // Check individual input validity
-    console.log("Form valid:", form.checkValidity()); // Check overall form validity
+// for (let i = 0; i < formInputs.length; i++) {
+//   formInputs[i].addEventListener("input", function () {
+//     console.log("Input value:", this.value);
+//     console.log("Input valid:", this.checkValidity()); // Check individual input validity
+//     console.log("Form valid:", form.checkValidity()); // Check overall form validity
 
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-      console.log("Button enabled!");
-    } else {
-      formBtn.setAttribute("disabled", "");
-      console.log("Button disabled!");
-    }
-  });
-}
+//     if (form.checkValidity()) {
+//       formBtn.removeAttribute("disabled");
+//       console.log("Button enabled!");
+//     } else {
+//       formBtn.setAttribute("disabled", "");
+//       console.log("Button disabled!");
+//     }
+//   });
+// }
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
@@ -152,3 +152,31 @@ for (let i = 0; i < navigationLinks.length; i++) {
     }
   });
 }
+
+const form = document.getElementById("contact-form");
+const formInputs = document.querySelectorAll("[data-form-input]");
+const formBtn = document.querySelector("[data-form-btn]");
+
+// Enable button only if form is valid
+formInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    formBtn.disabled = !form.checkValidity();
+  });
+});
+
+// Handle form submission
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  emailjs.sendForm("service_4bdykkb", "template_b4f7dvo", this).then(
+    () => {
+      alert("✅ Message sent successfully!");
+      form.reset();
+      formBtn.disabled = true;
+    },
+    (error) => {
+      console.error("Email send error:", error);
+      alert("❌ Failed to send message. Try again later.");
+    }
+  );
+});
